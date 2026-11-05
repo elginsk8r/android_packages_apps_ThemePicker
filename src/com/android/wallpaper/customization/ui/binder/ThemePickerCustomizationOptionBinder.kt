@@ -55,6 +55,7 @@ import com.android.customization.picker.iconpack.ui.binder.IconPackFloatingSheet
 import com.android.customization.picker.quickaffordance.ui.binder.ShortcutFloatingSheetBinder
 import com.android.customization.picker.quickaffordance.ui.compose.ShortcutsFloatingSheet
 import com.android.customization.picker.settings.ui.binder.ColorContrastSectionViewBinder2
+import com.android.customization.picker.themes.ui.binder.StyleFloatingSheetBinder
 import com.android.systemui.plugins.keyguard.ui.clocks.ClockAxisStyle
 import com.android.themepicker.R
 import com.android.wallpaper.config.BaseFlags
@@ -291,6 +292,18 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
             optionGridIcon = optionGrid.requireViewById(R.id.option_entry_icon)
         }
 
+        var optionStyles: View? = null
+        var optionStylesDescription: TextView? = null
+        var optionStylesIcon: ImageView? = null
+        if (customizationOptionsData.isStyleAvailable) {
+            optionStyles =
+                homeScreenCustomizationOptionEntries
+                    .first { it.first == ThemePickerHomeCustomizationOption.STYLES }
+                    .second
+            optionStylesDescription = optionStyles.requireViewById(R.id.option_entry_description)
+            optionStylesIcon = optionStyles.requireViewById(R.id.option_entry_icon)
+        }
+
         var optionIconPack: View? = null
         var optionIconPackDescription: TextView? = null
         var optionIconPackIcon: ImageView? = null
@@ -468,6 +481,24 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                             ->
                             optionGridDescription?.let { TextViewBinder.bind(it, gridOption.text) }
                             gridOption.payload?.let { optionGridIcon?.setImageDrawable(it) }
+                        }
+                    }
+                }
+
+                if (customizationOptionsData.isStyleAvailable) {
+                    launch {
+                        optionsViewModel.onCustomizeStylesClicked.collect {
+                            optionStyles?.setOnClickListener { _ -> it?.invoke() }
+                        }
+                    }
+
+                    launch {
+                        optionsViewModel.stylePickerViewModel.selectedThemePack.collect {
+                            themePack ->
+                            optionStylesDescription?.let {
+                                TextViewBinder.bind(it, themePack.text)
+                            }
+                            optionStylesIcon?.setImageDrawable(themePack.payload)
                         }
                     }
                 }
@@ -785,6 +816,18 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                 Dispatchers.IO,
             )
         }
+
+        customizationOptionFloatingSheetViewMap
+            ?.get(ThemePickerHomeCustomizationOption.STYLES)
+            ?.let {
+                StyleFloatingSheetBinder.bind(
+                    it,
+                    optionsViewModel,
+                    colorUpdateViewModel,
+                    lifecycleOwner,
+                    Dispatchers.IO,
+                )
+            }
 
         customizationOptionFloatingSheetViewMap
             ?.get(ThemePickerHomeCustomizationOption.ICON_PACKS)

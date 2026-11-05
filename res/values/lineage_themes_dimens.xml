@@ -5,6 +5,8 @@
 -->
 
 <resources>
+    <dimen name="theme_preview_height">180dp</dimen>
+    <dimen name="theme_preview_corner_radius">16dp</dimen>
     <dimen name="theme_preview_spacing">12dp</dimen>
     <dimen name="theme_preview_icon_size">40dp</dimen>
 </resources>

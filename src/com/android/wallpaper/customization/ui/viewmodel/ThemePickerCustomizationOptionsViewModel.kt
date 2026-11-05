@@ -27,12 +27,14 @@ import com.android.customization.picker.iconpack.ui.viewmodel.IconPackPickerView
 import com.android.customization.picker.mode.ui.viewmodel.DarkModeViewModel
 import com.android.customization.picker.quickaffordance.ui.viewmodel.KeyguardQuickAffordancePickerViewModel2
 import com.android.customization.picker.settings.ui.viewmodel.ColorContrastSectionViewModel2
+import com.android.customization.picker.themes.ui.viewmodel.StylePickerViewModel
 import com.android.wallpaper.config.BaseFlags
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.APP_ICONS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.COLORS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.GRID
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.ICON_PACKS
+import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.STYLES
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.CLOCK
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.SHORTCUTS
 import com.android.wallpaper.picker.common.preview.ui.viewmodel.WorkspacePreviewScreen
@@ -79,6 +81,7 @@ constructor(
     gridPickerViewModelFactory: GridPickerViewModel.Factory,
     appIconPickerViewModelFactory: AppIconPickerViewModel.Factory,
     iconPackPickerViewModelFactory: IconPackPickerViewModel.Factory,
+    stylePickerViewModelFactory: StylePickerViewModel.Factory,
     val colorContrastSectionViewModel: ColorContrastSectionViewModel2,
     val darkModeViewModel: DarkModeViewModel,
     val packThemeViewModel: PackThemeViewModel,
@@ -109,6 +112,8 @@ constructor(
         appIconPickerViewModelFactory.create(viewModelScope = viewModelScope)
     val iconPackPickerViewModel =
         iconPackPickerViewModelFactory.create(viewModelScope = viewModelScope)
+    val stylePickerViewModel =
+        stylePickerViewModelFactory.create(viewModelScope = viewModelScope)
 
     override val customizationOptionsData: Flow<CustomizationOptionsData> =
         if (BaseFlags.get(appContext).isExtendibleThemeManager()) {
@@ -117,17 +122,20 @@ constructor(
                 appIconPickerViewModel.isIconStyleAvailable,
                 appIconPickerViewModel.isShapeOptionsAvailable,
                 iconPackPickerViewModel.isIconPackCustomizationAvailable,
+                stylePickerViewModel.isStyleCustomizationAvailable,
             ) {
                 isGridCustomizationAvailable,
                 isIconStyleAvailable,
                 isShapeOptionsAvailable,
-                isIconPackAvailable ->
+                isIconPackAvailable,
+                isStyleAvailable ->
                 ThemePickerCustomizationOptionsData(
                     isGridCustomizationAvailable = isGridCustomizationAvailable,
                     isIconStyleAvailable = isIconStyleAvailable,
                     isShapeAvailable = isShapeOptionsAvailable,
                     isColorCustomizationAvailable = !ActivityUtils.isSUWMode(appContext),
                     isIconPackAvailable = isIconPackAvailable,
+                    isStyleAvailable = isStyleAvailable,
                 )
             }
         } else {
@@ -136,17 +144,20 @@ constructor(
                 appIconPickerViewModel.isThemedIconAvailable,
                 appIconPickerViewModel.isShapeOptionsAvailable,
                 iconPackPickerViewModel.isIconPackCustomizationAvailable,
+                stylePickerViewModel.isStyleCustomizationAvailable,
             ) {
                 isGridCustomizationAvailable,
                 isThemedIconAvailable,
                 isShapeOptionsAvailable,
-                isIconPackAvailable ->
+                isIconPackAvailable,
+                isStyleAvailable ->
                 ThemePickerCustomizationOptionsData(
                     isGridCustomizationAvailable = isGridCustomizationAvailable,
                     isIconStyleAvailable = isThemedIconAvailable,
                     isShapeAvailable = isShapeOptionsAvailable,
                     isColorCustomizationAvailable = !ActivityUtils.isSUWMode(appContext),
                     isIconPackAvailable = isIconPackAvailable,
+                    isStyleAvailable = isStyleAvailable,
                 )
             }
         }
@@ -203,6 +214,7 @@ constructor(
         keyguardQuickAffordancePickerViewModel2.resetPreview()
         gridPickerViewModel.resetPreview()
         iconPackPickerViewModel.resetPreview()
+        stylePickerViewModel.resetPreview()
         if (BaseFlags.get(appContext).isExtendibleThemeManager()) {
             appIconPickerViewModel.resetPreview2()
         } else {
@@ -274,6 +286,15 @@ constructor(
             }
         }
 
+    val onCustomizeStylesClicked: Flow<(() -> Unit)?> =
+        selectedOption.map {
+            if (it == null) {
+                { defaultCustomizationOptionsViewModel.selectOption(STYLES) }
+            } else {
+                null
+            }
+        }
+
     val onCustomizeIconPacksClicked: Flow<(() -> Unit)?> =
         selectedOption.map {
             if (it == null) {
@@ -301,6 +322,7 @@ constructor(
                     SHORTCUTS -> keyguardQuickAffordancePickerViewModel2.onApply
                     GRID -> gridPickerViewModel.onApply
                     ICON_PACKS -> iconPackPickerViewModel.onApply
+                    STYLES -> stylePickerViewModel.onApply
                     APP_ICONS ->
                         if (BaseFlags.get(appContext).isExtendibleThemeManager()) {
                             appIconPickerViewModel.iconStyleAndShapeOnApply

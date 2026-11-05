@@ -13,4 +13,32 @@
     <string name="icon_pack_default_description">Apps use their own icons</string>
     <!-- Preview of an icon pack without icons of its own for the installed apps. [CHAR LIMIT=NONE] -->
     <string name="icon_pack_restyled_description"><xliff:g id="name" example="Ameixa">%1$s</xliff:g> restyles the icons of your apps</string>
+
+    <!-- Title of the customization option and sheet picking a style, a theme package whose wallpapers, icons, sounds and look of the system are applied together. [CHAR LIMIT=30] -->
+    <string name="styles_title">Styles</string>
+    <!-- Name of the option applying the device's default style. [CHAR LIMIT=20] -->
+    <string name="styles_default">Default</string>
+    <!-- Preview of the device's default style. [CHAR LIMIT=NONE] -->
+    <string name="styles_default_description">Resets wallpapers, icons, sounds and the look of the system to their defaults</string>
+    <!-- Name and author of the previewed style. [CHAR LIMIT=NONE] -->
+    <string name="styles_name_author"><xliff:g id="name" example="Hexo">%1$s</xliff:g> by <xliff:g id="author" example="Jane">%2$s</xliff:g></string>
+    <!-- Name of the previewed style and the components it includes. [CHAR LIMIT=NONE] -->
+    <string name="styles_preview_description"><xliff:g id="name" example="Hexo by Jane">%1$s</xliff:g>\n<xliff:g id="components" example="Wallpaper, Icons">%2$s</xliff:g></string>
+    <!-- Content description of the previewed style's home screen wallpaper. [CHAR LIMIT=NONE] -->
+    <string name="styles_preview_wallpaper">Style wallpaper</string>
+    <!-- Content description of the previewed style's lock screen wallpaper. [CHAR LIMIT=NONE] -->
+    <string name="styles_preview_lock_wallpaper">Style lock screen wallpaper</string>
+
+    <!-- Theme components. [CHAR LIMIT=40] -->
+    <string name="theme_component_overlays">System and apps</string>
+    <string name="theme_component_status_bar">Status bar</string>
+    <string name="theme_component_navigation_bar">Navigation bar</string>
+    <string name="theme_component_icons">Icons</string>
+    <string name="theme_component_fonts">Font</string>
+    <string name="theme_component_wallpaper">Wallpaper</string>
+    <string name="theme_component_lockscreen">Lock screen wallpaper</string>
+    <string name="theme_component_ringtone">Ringtone</string>
+    <string name="theme_component_notification">Notification sound</string>
+    <string name="theme_component_alarm">Alarm sound</string>
+    <string name="theme_component_boot_animation">Boot animation</string>
 </resources>

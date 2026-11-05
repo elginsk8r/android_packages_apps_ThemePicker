@@ -24,6 +24,7 @@ class ThemePickerCustomizationOptionsData(
     val isShapeAvailable: Boolean,
     val isColorCustomizationAvailable: Boolean,
     val isIconPackAvailable: Boolean,
+    val isStyleAvailable: Boolean,
 ) : CustomizationOptionsData {
     val isIconCustomizationAvailable = isIconStyleAvailable || isShapeAvailable
 }

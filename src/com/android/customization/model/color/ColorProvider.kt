@@ -30,6 +30,7 @@ import com.android.customization.model.ResourcesApkProvider
 import com.android.customization.model.color.ColorProviderUtil.COLOR_SOURCE_HOME
 import com.android.customization.model.color.ColorProviderUtil.COLOR_SOURCE_PRESET
 import com.android.customization.picker.color.shared.model.ColorType
+import com.android.customization.picker.themes.data.repository.ThemeColorLoader
 import com.android.systemui.monet.ColorScheme
 import com.android.wallpaper.config.BaseFlags
 import kotlinx.coroutines.CoroutineScope
@@ -271,7 +272,29 @@ open class ColorProvider(private val context: Context, stubPackageName: String) 
                 monochromeBundleName = null
             }
 
-            presetColorBundles = bundles
+            // The colors of installed theme packages come first
+            val themeBundles =
+                ThemeColorLoader(context).load().mapIndexed { i, themeColor ->
+                    if (isUsingThemeService) {
+                        ColorOptionImpl.buildSimplifiedSeedOption(
+                            title = themeColor.themeName,
+                            source = COLOR_SOURCE_PRESET,
+                            seedColor = themeColor.color,
+                            defaultStyle = themeColor.style,
+                        )
+                    } else {
+                        ColorProviderUtil.buildPreset(
+                            title = themeColor.themeName,
+                            color = themeColor.color,
+                            // Continue the indices of the preset colors
+                            index = bundleNames.size + i + 1,
+                            style = themeColor.style,
+                            isColorPickerUpdateEnabled = isColorPickerUpdateEnabled,
+                        )
+                    }
+                }
+
+            presetColorBundles = themeBundles + bundles
             loaderJob = null
         }
 

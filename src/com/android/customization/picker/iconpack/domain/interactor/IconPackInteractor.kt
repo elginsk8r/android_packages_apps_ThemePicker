@@ -34,12 +34,15 @@ constructor(
             it[ThemeUtils.MODIFIES_ICONS] ?: DEFAULT_ICON_PACK_KEY
         }
 
-    /** Applies an icon pack, or restores the apps' own icons for [DEFAULT_ICON_PACK_KEY]. */
+    /**
+     * Applies an icon pack, or restores the apps' own icons for [DEFAULT_ICON_PACK_KEY]. Themes
+     * applied to single apps are kept.
+     */
     suspend fun applyIconPack(key: String): Boolean =
         if (key == DEFAULT_ICON_PACK_KEY) {
-            themeComponentRepository.resetComponents(ICON_COMPONENTS)
+            themeComponentRepository.resetComponents(ICON_COMPONENTS, false)
         } else {
-            themeComponentRepository.applyComponents(key, ICON_COMPONENTS)
+            themeComponentRepository.applyComponents(key, ICON_COMPONENTS, false)
         }
 
     suspend fun getPreviewIcons(key: String): List<Drawable> = repository.getPreviewIcons(key)
