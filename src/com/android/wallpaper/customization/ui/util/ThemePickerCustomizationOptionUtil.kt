@@ -17,6 +17,7 @@
 package com.android.wallpaper.customization.ui.util
 
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.APP_ICONS
+import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.ICON_PACKS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.SHORTCUTS
 import com.android.wallpaper.model.Screen
 import com.android.wallpaper.picker.customization.ui.util.CustomizationOptionUtil
@@ -44,6 +45,7 @@ constructor(private val defaultCustomizationOptionUtil: DefaultCustomizationOpti
         COLORS,
         COLOR_CONTRAST,
         APP_ICONS,
+        ICON_PACKS,
         GRID,
     }
 
@@ -52,6 +54,7 @@ constructor(private val defaultCustomizationOptionUtil: DefaultCustomizationOpti
             ?: when (destination) {
                 DESTINATION_QUICK_AFFORDANCES -> SHORTCUTS
                 DESTINATION_ICONS -> APP_ICONS
+                DESTINATION_ICON_PACKS -> ICON_PACKS
                 else -> null
             }
     }
@@ -67,5 +70,6 @@ constructor(private val defaultCustomizationOptionUtil: DefaultCustomizationOpti
     companion object {
         const val DESTINATION_QUICK_AFFORDANCES = "quick_affordances"
         const val DESTINATION_ICONS = "icons"
+        const val DESTINATION_ICON_PACKS = "icon_packs"
     }
 }

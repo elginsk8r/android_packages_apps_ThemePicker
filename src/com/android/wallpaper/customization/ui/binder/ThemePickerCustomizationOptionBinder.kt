@@ -51,6 +51,7 @@ import com.android.customization.picker.grid.ui.binder.GridFloatingSheetBinder
 import com.android.customization.picker.icon.ui.binder.AppIconFloatingSheetBinder
 import com.android.customization.picker.icon.ui.binder.ShapeIconViewBinder
 import com.android.customization.picker.icon.ui.util.IconStyleViewUtil
+import com.android.customization.picker.iconpack.ui.binder.IconPackFloatingSheetBinder
 import com.android.customization.picker.quickaffordance.ui.binder.ShortcutFloatingSheetBinder
 import com.android.customization.picker.quickaffordance.ui.compose.ShortcutsFloatingSheet
 import com.android.customization.picker.settings.ui.binder.ColorContrastSectionViewBinder2
@@ -290,6 +291,19 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
             optionGridIcon = optionGrid.requireViewById(R.id.option_entry_icon)
         }
 
+        var optionIconPack: View? = null
+        var optionIconPackDescription: TextView? = null
+        var optionIconPackIcon: ImageView? = null
+        if (customizationOptionsData.isIconPackAvailable) {
+            optionIconPack =
+                homeScreenCustomizationOptionEntries
+                    .first { it.first == ThemePickerHomeCustomizationOption.ICON_PACKS }
+                    .second
+            optionIconPackDescription =
+                optionIconPack.requireViewById(R.id.option_entry_description)
+            optionIconPackIcon = optionIconPack.requireViewById(R.id.option_entry_icon)
+        }
+
         val optionColorContrast: View =
             homeScreenCustomizationOptionEntries
                 .first { it.first == ThemePickerHomeCustomizationOption.COLOR_CONTRAST }
@@ -454,6 +468,24 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                             ->
                             optionGridDescription?.let { TextViewBinder.bind(it, gridOption.text) }
                             gridOption.payload?.let { optionGridIcon?.setImageDrawable(it) }
+                        }
+                    }
+                }
+
+                if (customizationOptionsData.isIconPackAvailable) {
+                    launch {
+                        optionsViewModel.onCustomizeIconPacksClicked.collect {
+                            optionIconPack?.setOnClickListener { _ -> it?.invoke() }
+                        }
+                    }
+
+                    launch {
+                        optionsViewModel.iconPackPickerViewModel.selectedIconPack.collect {
+                            iconPack ->
+                            optionIconPackDescription?.let {
+                                TextViewBinder.bind(it, iconPack.text)
+                            }
+                            optionIconPackIcon?.setImageDrawable(iconPack.payload)
                         }
                     }
                 }
@@ -753,6 +785,18 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                 Dispatchers.IO,
             )
         }
+
+        customizationOptionFloatingSheetViewMap
+            ?.get(ThemePickerHomeCustomizationOption.ICON_PACKS)
+            ?.let {
+                IconPackFloatingSheetBinder.bind(
+                    it,
+                    optionsViewModel,
+                    colorUpdateViewModel,
+                    lifecycleOwner,
+                    Dispatchers.IO,
+                )
+            }
     }
 
     // Track the current show clock flag. If it turns from false to true, animate fade-in.
