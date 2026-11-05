@@ -103,7 +103,7 @@ constructor(
             .associateBy { it.packageName }
 
     /** @return whether a theme package ships an icon pack. */
-    private fun hasIconPack(packageName: String): Boolean {
+    fun hasIconPack(packageName: String): Boolean {
         val res =
             try {
                 context.createPackageContext(packageName, 0).resources

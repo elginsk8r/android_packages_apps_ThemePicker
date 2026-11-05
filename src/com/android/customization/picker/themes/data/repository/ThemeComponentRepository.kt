@@ -78,19 +78,38 @@ constructor(
     /**
      * Applies the given components of a theme package, waiting for the theme change to finish.
      *
+     * @param removePerAppThemes whether to also remove the themes applied to single apps
      * @return whether the components were applied successfully
      */
-    suspend fun applyComponents(packageName: String, components: List<String>): Boolean =
-        awaitThemeChange { it.requestThemeChange(packageName, components) }
+    suspend fun applyComponents(
+        packageName: String,
+        components: List<String>,
+        removePerAppThemes: Boolean,
+    ): Boolean = awaitThemeChange {
+        it.requestThemeChange(packageName, components, removePerAppThemes)
+    }
 
     /**
      * Resets the given components to the system default, waiting for the theme change to finish.
      *
+     * @param removePerAppThemes whether to also remove the themes applied to single apps
      * @return whether the components were reset successfully
      */
-    suspend fun resetComponents(components: List<String>): Boolean = awaitThemeChange {
-        it.requestThemeChange(components.associateWith { ThemeConfig.SYSTEM_DEFAULT })
-    }
+    suspend fun resetComponents(components: List<String>, removePerAppThemes: Boolean): Boolean =
+        awaitThemeChange {
+            it.requestThemeChange(
+                components.associateWith { ThemeConfig.SYSTEM_DEFAULT },
+                removePerAppThemes,
+            )
+        }
+
+    /**
+     * Applies the theme the device is configured with by default, or resets every component if
+     * there is none, waiting for the theme change to finish.
+     *
+     * @return whether the theme was applied successfully
+     */
+    suspend fun applyDefaultTheme(): Boolean = awaitThemeChange { it.applyDefaultTheme() }
 
     private suspend fun awaitThemeChange(request: (ThemeManager) -> Unit): Boolean {
         val manager = themeManager ?: return false

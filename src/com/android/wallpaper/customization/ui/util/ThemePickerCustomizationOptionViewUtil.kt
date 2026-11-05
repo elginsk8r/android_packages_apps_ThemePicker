@@ -35,6 +35,7 @@ import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptio
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.ICON_PACKS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.PACK_THEME
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.SCREEN_SAVER
+import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.STYLES
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.CLOCK
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.LOCK_SCREEN_NOTIFICATIONS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.MORE_LOCK_SCREEN_SETTINGS
@@ -156,6 +157,16 @@ constructor(
                                 )
                         )
                     }
+                    if (customizationOptionsData.isStyleAvailable) {
+                        add(
+                            STYLES to
+                                layoutInflater.inflate(
+                                    R.layout.customization_option_entry_styles,
+                                    optionContainer,
+                                    false,
+                                )
+                        )
+                    }
                     if (customizationOptionsData.isColorCustomizationAvailable) {
                         add(
                             COLORS to
@@ -267,6 +278,14 @@ constructor(
                     .also { bottomSheetContainer.addView(it) },
             )
             put(APP_ICONS, inflateFloatingSheet(APP_ICONS, bottomSheetContainer, layoutInflater))
+            if (customizationOptionsData.isStyleAvailable) {
+                put(
+                    STYLES,
+                    inflateFloatingSheet(STYLES, bottomSheetContainer, layoutInflater).also {
+                        bottomSheetContainer.addView(it)
+                    },
+                )
+            }
             if (customizationOptionsData.isIconPackAvailable) {
                 put(
                     ICON_PACKS,
@@ -306,6 +325,7 @@ constructor(
             COLORS -> R.layout.floating_sheet_colors
             APP_ICONS -> R.layout.floating_sheet_app_icon
             ICON_PACKS -> R.layout.floating_sheet_icon_pack
+            STYLES -> R.layout.floating_sheet_styles
             GRID -> R.layout.floating_sheet_grid
             else ->
                 throw IllegalStateException(
