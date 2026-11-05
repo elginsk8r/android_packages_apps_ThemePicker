@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of the customization option and sheet picking the icon pack. [CHAR LIMIT=30] -->
+    <string name="icon_pack_title">Icon pack</string>
+    <!-- Name of the option restoring the apps' own icons. [CHAR LIMIT=20] -->
+    <string name="icon_pack_default">Default</string>
+    <!-- Preview of the option restoring the apps' own icons. [CHAR LIMIT=NONE] -->
+    <string name="icon_pack_default_description">Apps use their own icons</string>
+    <!-- Preview of an icon pack without icons of its own for the installed apps. [CHAR LIMIT=NONE] -->
+    <string name="icon_pack_restyled_description"><xliff:g id="name" example="Ameixa">%1$s</xliff:g> restyles the icons of your apps</string>
+</resources>

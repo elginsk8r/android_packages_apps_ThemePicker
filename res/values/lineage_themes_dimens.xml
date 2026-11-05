@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+
+<resources>
+    <dimen name="theme_preview_spacing">12dp</dimen>
+    <dimen name="theme_preview_icon_size">40dp</dimen>
+</resources>
