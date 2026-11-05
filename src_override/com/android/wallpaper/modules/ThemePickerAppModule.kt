@@ -32,6 +32,7 @@ import com.android.customization.picker.color.data.repository.ColorPickerReposit
 import com.android.customization.picker.color.data.repository.ColorPickerRepositoryImpl
 import com.android.customization.picker.icon.data.repository.IconStyleRepository
 import com.android.customization.picker.icon.data.repository.ThemePickerIconStyleRepository
+import com.android.customization.picker.themes.wallpaper.ThemeWallpaperCategoryInteractor
 import com.android.systemui.shared.clocks.ClockRegistry
 import com.android.systemui.shared.customization.data.content.CustomizationProviderClient
 import com.android.systemui.shared.customization.data.content.CustomizationProviderClientImpl
@@ -57,7 +58,6 @@ import com.android.wallpaper.picker.category.domain.interactor.CreativeCategoryI
 import com.android.wallpaper.picker.category.domain.interactor.CuratedPhotosInteractor
 import com.android.wallpaper.picker.category.domain.interactor.OnDeviceWallpapersInteractor
 import com.android.wallpaper.picker.category.domain.interactor.ThirdPartyCategoryInteractor
-import com.android.wallpaper.picker.category.domain.interactor.implementations.CategoryInteractorImpl
 import com.android.wallpaper.picker.category.domain.interactor.implementations.CreativeCategoryInteractorImpl
 import com.android.wallpaper.picker.category.domain.interactor.implementations.DefaultCategoriesLoadingStatusInteractor
 import com.android.wallpaper.picker.category.domain.interactor.implementations.DefaultCuratedPhotosInteractorImpl
@@ -180,7 +180,9 @@ abstract class ThemePickerAppModule {
 
     @Binds
     @Singleton
-    abstract fun bindGoogleCategoryInteractor(impl: CategoryInteractorImpl): CategoryInteractor
+    abstract fun bindGoogleCategoryInteractor(
+        impl: ThemeWallpaperCategoryInteractor
+    ): CategoryInteractor
 
     @Binds
     @Singleton
